@@ -1,0 +1,33 @@
+{
+  "version": "4",
+  "remote": {
+    "https://deno.land/std@0.161.0/_util/assert.ts": "e94f2eb37cebd7f199952e242c77654e43333c1ac4c5c700e929ea3aa5489f74",
+    "https://deno.land/std@0.161.0/_util/os.ts": "8a33345f74990e627b9dfe2de9b040004b08ea5146c7c9e8fe9a29070d193934",
+    "https://deno.land/std@0.161.0/path/_constants.ts": "df1db3ffa6dd6d1252cc9617e5d72165cd2483df90e93833e13580687b6083c3",
+    "https://deno.land/std@0.161.0/path/_interface.ts": "ee3b431a336b80cf445441109d089b70d87d5e248f4f90ff906820889ecf8d09",
+    "https://deno.land/std@0.161.0/path/_util.ts": "d16be2a16e1204b65f9d0dfc54a9bc472cafe5f4a190b3c8471ec2016ccd1677",
+    "https://deno.land/std@0.161.0/path/common.ts": "bee563630abd2d97f99d83c96c2fa0cca7cee103e8cb4e7699ec4d5db7bd2633",
+    "https://deno.land/std@0.161.0/path/glob.ts": "cb5255638de1048973c3e69e420c77dc04f75755524cb3b2e160fe9277d939ee",
+    "https://deno.land/std@0.161.0/path/mod.ts": "56fec03ad0ebd61b6ab39ddb9b0ddb4c4a5c9f2f4f632e09dd37ec9ebfd722ac",
+    "https://deno.land/std@0.161.0/path/posix.ts": "6b63de7097e68c8663c84ccedc0fd977656eb134432d818ecd3a4e122638ac24",
+    "https://deno.land/std@0.161.0/path/separator.ts": "fe1816cb765a8068afb3e8f13ad272351c85cbc739af56dacfc7d93d710fe0f9",
+    "https://deno.land/std@0.161.0/path/win32.ts": "ee8826dce087d31c5c81cd414714e677eb68febc40308de87a2ce4b40e10fb8d",
+    "https://raw.githubusercontent.com/DjDeveloperr/deno_objc/refs/heads/main/deps.ts": "acdd42688abba269ea4aabcc402b6d3d0066a86bd2e53903b88e33cc76702f36",
+    "https://raw.githubusercontent.com/DjDeveloperr/deno_objc/refs/heads/main/mod.ts": "1f8cfbe732a7c59967481b2fc8e89f2a23956b343b7ce89e8361624716582b62",
+    "https://raw.githubusercontent.com/DjDeveloperr/deno_objc/refs/heads/main/src/autoreleasePool.ts": "15112735d267bac8997784de665c770f51ca0e060e0825b79e54eacb58b57287",
+    "https://raw.githubusercontent.com/DjDeveloperr/deno_objc/refs/heads/main/src/bindings.ts": "4330e8157dd98a3d160fef8224056921d2f85ee1eeea23336c8d4472be8526d4",
+    "https://raw.githubusercontent.com/DjDeveloperr/deno_objc/refs/heads/main/src/block.ts": "0541b33b8fac81f793808a092d14845f4631f2237655a998ab57e469bb89d83d",
+    "https://raw.githubusercontent.com/DjDeveloperr/deno_objc/refs/heads/main/src/class.ts": "79f8b1440fc4e789ced17b3a54f6bb43ac72f8e617558f78402ebb79c15a9ace",
+    "https://raw.githubusercontent.com/DjDeveloperr/deno_objc/refs/heads/main/src/common.ts": "60369612b8f29c57b5f8b22f321725e550a7dc523c71dcabe48ce01f2aec16e4",
+    "https://raw.githubusercontent.com/DjDeveloperr/deno_objc/refs/heads/main/src/encoding.ts": "cebe4589de1b494d19c383d60a827727c4763ee6a2afd0cc26cbe4fb632a41be",
+    "https://raw.githubusercontent.com/DjDeveloperr/deno_objc/refs/heads/main/src/imp.ts": "6175ed2564b4474dde0856aeea79a4b5132d51d551b3a1cd2f872a2112af4bfe",
+    "https://raw.githubusercontent.com/DjDeveloperr/deno_objc/refs/heads/main/src/ivar.ts": "177674c595fa01c86ece57277367ba558e4170f3b3d8761957328707688336fe",
+    "https://raw.githubusercontent.com/DjDeveloperr/deno_objc/refs/heads/main/src/method.ts": "76727afa9bad390d8b589a8b051ccaf844a237edea247f22d67bce5278b86c9e",
+    "https://raw.githubusercontent.com/DjDeveloperr/deno_objc/refs/heads/main/src/objc.ts": "37de67a4fce238574ec9a155cc8ea54064e7a233509b8184e2030c5ff351037a",
+    "https://raw.githubusercontent.com/DjDeveloperr/deno_objc/refs/heads/main/src/object.ts": "a56d29f1af23cc1c3e7dd387e4ad43f73cb0f564f15567eba6a3b4f8a32ac4a3",
+    "https://raw.githubusercontent.com/DjDeveloperr/deno_objc/refs/heads/main/src/property.ts": "d0ea4e0ee285f8dbd26c4522064119fbe142c4e05ec96ef8068e2f1489bb610e",
+    "https://raw.githubusercontent.com/DjDeveloperr/deno_objc/refs/heads/main/src/protocol.ts": "5a450ddad070ebe0300c47f4794ac3e31b4f362c13a8c583ebfcb219c09390a6",
+    "https://raw.githubusercontent.com/DjDeveloperr/deno_objc/refs/heads/main/src/sel.ts": "bb5045e8ff2371d09a6ff0e83373255a3ffc84e968bef2d9619e3b33e79bb3e6",
+    "https://raw.githubusercontent.com/DjDeveloperr/deno_objc/refs/heads/main/src/util.ts": "cbf7012c7aedf57332af47f6fda20f9fb34d9c17a89f44ac10ebf85718dec97e"
+  }
+}

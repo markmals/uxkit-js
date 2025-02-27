@@ -1,0 +1,18 @@
+{
+    "$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
+    "version": "0.1.0",
+    "fmt": {
+        "options": {
+            "indentWidth": 4,
+            "lineWidth": 100,
+            "singleQuote": true,
+            "proseWrap": "always"
+        }
+    },
+    // "tasks": {
+    //     "compile": "deno compile --output ./mount-buddy --allow-read --allow-write --allow-run ./src/main.ts"
+    // },
+    "imports": {
+        "objc": "https://raw.githubusercontent.com/DjDeveloperr/deno_objc/refs/heads/main/mod.ts"
+    }
+}
