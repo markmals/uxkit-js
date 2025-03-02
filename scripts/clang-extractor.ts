@@ -32,6 +32,7 @@ interface ObjCMethod {
 interface ObjCMethodArgs {
     name: string;
     type: string;
+    isNullable: boolean;
 }
 
 interface ObjCProperty {
@@ -55,12 +56,20 @@ function parseMethodDecl(
     const args = argsNum > 0
         ? Array(argsNum)
             .fill(null)
-            .map((_, idx) => ({
-                name: cursor.getArgument(idx)!.getSpelling(),
-                // FIXME: We should get the type that is listed in the header
-                // (e.g. `NSButtonType` instead of `id`)
-                type: cursor.getArgument(idx)!.getType()!.getSpelling(),
-            }))
+            .map((_, idx) => {
+                const arg = cursor.getArgument(idx)!;
+                const type = arg.getType()!;
+                const isNullable = type.getNullability() ===
+                    CXTypeNullabilityKind.CXTypeNullability_Nullable;
+
+                return ({
+                    name: arg.getSpelling(),
+                    // FIXME: We should get the type that is listed in the header
+                    // (e.g. `NSButtonType` instead of `id`)
+                    type: type.getSpelling(),
+                    isNullable,
+                });
+            })
         : [];
 
     return {
