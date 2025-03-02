@@ -16,88 +16,77 @@ import {
 // Set this to an empty string if you don't use `Xcodes` to install your Xcode versions
 const XCODE_VERSION = '-16.2.0';
 
-interface ObjCClass {
-    className: string;
-    methods: ObjCMethod[];
-    properties: ObjCProperty[];
+class ObjCClass {
+    readonly className: string;
+    readonly methods: ObjCMethod[] = [];
+    readonly properties: ObjCProperty[] = [];
+
+    constructor({ cursor }: { cursor: CXCursor }) {
+        this.className = cursor.getSpelling();
+    }
 }
 
-interface ObjCMethod {
-    selector: string;
-    arguments: ObjCMethodArgs[];
-    isStatic: boolean;
-    returnType: string;
+class ObjCMethod {
+    readonly selector: string;
+    readonly arguments: ObjCMethodArgs[];
+    readonly isStatic: boolean;
+    readonly returnType: string;
+
+    constructor({ cursor, isStatic }: { cursor: CXCursor; isStatic: boolean }) {
+        this.isStatic = isStatic;
+        this.selector = cursor.getSpelling();
+        // FIXME: We should get the type that is listed in the header
+        // (e.g. `NSButtonType` instead of `id`)
+        this.returnType = cursor.getResultType()!.getSpelling();
+
+        const args = cursor.getNumberOfArguments();
+        this.arguments = args > 0
+            ? Array(args)
+                .fill(null)
+                .map((_, index) => new ObjCMethodArgs({ cursor, index }))
+            : [];
+    }
 }
 
-interface ObjCMethodArgs {
-    name: string;
-    type: string;
-    isNullable: boolean;
+class ObjCMethodArgs {
+    readonly name: string;
+    readonly type: string;
+    readonly isNullable: boolean;
+
+    constructor({ cursor, index }: { cursor: CXCursor; index: number }) {
+        const arg = cursor.getArgument(index)!;
+        const type = arg.getType()!;
+
+        this.name = arg.getSpelling();
+        this.type = type.getSpelling();
+        this.isNullable = type.getNullability() ===
+            CXTypeNullabilityKind.CXTypeNullability_Nullable;
+    }
 }
 
-interface ObjCProperty {
-    isNullable: boolean;
-    isReadonly: boolean;
-    getterSelector: string;
-    setterSelector?: string;
-    type: string;
+class ObjCProperty {
+    readonly isNullable: boolean;
+    readonly isReadonly: boolean;
+    readonly getterSelector: string;
+    readonly setterSelector?: string;
+    readonly type: string;
+
+    constructor({ cursor }: { cursor: CXCursor }) {
+        const type = cursor.getType()!;
+        const attributes = cursor.getObjCPropertyAttributes();
+
+        this.getterSelector = cursor.getObjCPropertyGetterName();
+        this.setterSelector = cursor.getObjCPropertySetterName();
+        this.isReadonly = (attributes & CXObjCPropertyAttrKind.CXObjCPropertyAttr_readonly) !== 0;
+        this.isNullable =
+            type.getNullability() === CXTypeNullabilityKind.CXTypeNullability_Nullable;
+        // FIXME: We should get the type that is listed in the header
+        // (e.g. `NSButtonType` instead of `id`)
+        this.type = type.getSpelling();
+    }
 }
 
 const classes = [] as ObjCClass[];
-
-function parseMethodDecl(
-    { cursor, isStatic }: { cursor: CXCursor; isStatic: boolean },
-): ObjCMethod {
-    const argsNum = cursor.getNumberOfArguments();
-    // FIXME: We should get the type that is listed in the header
-    // (e.g. `NSButtonType` instead of `id`)
-    const returnType = cursor.getResultType()!.getSpelling();
-
-    const args = argsNum > 0
-        ? Array(argsNum)
-            .fill(null)
-            .map((_, idx) => {
-                const arg = cursor.getArgument(idx)!;
-                const type = arg.getType()!;
-                const isNullable = type.getNullability() ===
-                    CXTypeNullabilityKind.CXTypeNullability_Nullable;
-
-                return ({
-                    name: arg.getSpelling(),
-                    // FIXME: We should get the type that is listed in the header
-                    // (e.g. `NSButtonType` instead of `id`)
-                    type: type.getSpelling(),
-                    isNullable,
-                });
-            })
-        : [];
-
-    return {
-        isStatic,
-        selector: cursor.getSpelling(),
-        arguments: args,
-        returnType,
-    };
-}
-
-function parsePropertyDecl({ cursor }: { cursor: CXCursor }): ObjCProperty {
-    const getterSelector = cursor.getObjCPropertyGetterName();
-    const setterSelector = cursor.getObjCPropertySetterName();
-
-    const type = cursor.getType()!;
-    const attributes = cursor.getObjCPropertyAttributes();
-    const isReadonly = (attributes & CXObjCPropertyAttrKind.CXObjCPropertyAttr_readonly) !== 0;
-
-    return {
-        isNullable: type.getNullability() === CXTypeNullabilityKind.CXTypeNullability_Nullable,
-        isReadonly,
-        getterSelector,
-        setterSelector,
-        // FIXME: We should get the type that is listed in the header
-        // (e.g. `NSButtonType` instead of `id`)
-        type: type.getSpelling(),
-    };
-}
 
 function visitor(cursor: CXCursor): CXChildVisitResult {
     // Only process cursors from the main file.
@@ -107,28 +96,21 @@ function visitor(cursor: CXCursor): CXChildVisitResult {
 
     switch (cursor.kind) {
         case CXCursorKind.CXCursor_ObjCInterfaceDecl: {
-            const definition: ObjCClass = {
-                className: cursor.getSpelling(),
-                methods: [],
-                properties: [],
-            };
+            const definition = new ObjCClass({ cursor });
 
             // TODO: Grab the superclass and protocol conformances
             cursor.visitChildren((child) => {
                 switch (child.kind) {
                     case CXCursorKind.CXCursor_ObjCInstanceMethodDecl: {
-                        const parsed = parseMethodDecl({ cursor: child, isStatic: false });
-                        definition.methods.push(parsed);
+                        definition.methods.push(new ObjCMethod({ cursor: child, isStatic: false }));
                         break;
                     }
                     case CXCursorKind.CXCursor_ObjCClassMethodDecl: {
-                        const parsed = parseMethodDecl({ cursor: child, isStatic: true });
-                        definition.methods.push(parsed);
+                        definition.methods.push(new ObjCMethod({ cursor: child, isStatic: true }));
                         break;
                     }
                     case CXCursorKind.CXCursor_ObjCPropertyDecl: {
-                        const parsed = parsePropertyDecl({ cursor: child });
-                        definition.properties.push(parsed);
+                        definition.properties.push(new ObjCProperty({ cursor: child }));
                         break;
                     }
                     default: {
@@ -167,7 +149,7 @@ const unit = index.parseTranslationUnit(headerPath, [
 
 unit.getCursor().visitChildren(visitor);
 
-console.log(Deno.inspect(classes, { depth: 10 }));
+console.log(JSON.stringify(classes, null, 4));
 
 unit.dispose();
 index.dispose();
