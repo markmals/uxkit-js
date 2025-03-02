@@ -9,10 +9,16 @@
             "proseWrap": "always"
         }
     },
-    // "tasks": {
-    //     "compile": "deno compile --output ./mount-buddy --allow-read --allow-write --allow-run ./src/main.ts"
-    // },
+    "lint": {
+        "tags": ["recommended"]
+    },
+    "tasks": {
+        "generate-ts-api:method": "deno run --allow-read scripts/generate-ts-api.ts --mode method",
+        "generate-ts-api:class": "deno run -A scripts/generate-ts-api.ts --mode class",
+        "generate-ts-api:help": "deno run --allow-read scripts/generate-ts-api.ts --help"
+    },
     "imports": {
-        "objc": "https://raw.githubusercontent.com/DjDeveloperr/deno_objc/refs/heads/main/mod.ts"
+        "objc": "https://raw.githubusercontent.com/DjDeveloperr/deno_objc/refs/heads/main/mod.ts",
+        "clang": "https://deno.land/x/libclang@1.0.0-beta.9/mod.ts"
     }
 }
